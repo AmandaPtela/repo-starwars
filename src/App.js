@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import Table from './Table';
 import myContext from './context';
+import Search from './Search';
 
 function App() {
   const [dadosApi, setDadosApi] = useState([]);
@@ -24,7 +25,8 @@ function App() {
 
   return (
     <myContext.Provider value={ valueProvider }>
-      <span><Table /></span>
+      <Search />
+      <Table />
     </myContext.Provider>
   );
 }
