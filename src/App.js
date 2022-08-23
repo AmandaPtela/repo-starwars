@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './App.css';
 import Table from './Table';
 import myContext from './context';
@@ -18,15 +18,12 @@ function App() {
     };
     fetchApi();
   }, []);
-  dadosApi.forEach((i) => delete i.residents);
-  const valueProvider = {
-    dadosApiContext: dadosApi,
-  };
 
+  dadosApi.forEach((i) => delete i.residents);
   return (
-    <myContext.Provider value={ valueProvider }>
-      <Search />
-      <Table />
+    <myContext.Provider value={ dadosApi }>
+      <Search planetas={ dadosApi } />
+      <Table planetas={ dadosApi } />
     </myContext.Provider>
   );
 }
