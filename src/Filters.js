@@ -5,12 +5,29 @@ function Filters() {
   const [columnState, setColumState] = useState('population');
   const [comparisonState, setComparisonState] = useState('maior que');
   const [numberState, setNumberState] = useState(0);
-  const arrayFilters = [
+  const [arrayFilters, setArrayFilters] = useState([
     'population',
     'orbital_period',
     'diameter',
     'rotation_period',
-    'surface_water'];
+    'surface_water']);
+  const [arrayComparison, setComparisonF] = useState([
+    'maior que',
+    'menor que',
+    'igual a',
+  ]);
+  /*   const arrayFilters = [
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water']; */
+
+  /*   const arrayComparison = [
+    'maior que',
+    'menor que',
+    'igual a',
+  ]; */
   const { objFilters, setObjectFilters } = useContext(myContext);
 
   function handleInput({ target }) {
@@ -33,6 +50,10 @@ function Filters() {
         number: numberState,
       }],
     );
+    console.log(objFilters);
+    setArrayFilters(arrayFilters.filter((item) => item !== columnState));
+    setComparisonF(arrayComparison.filter((item) => item !== comparisonState));
+    console.log(objFilters);
   }
   return (
     <>
@@ -58,24 +79,15 @@ function Filters() {
         data-testid="comparison-filter"
         value={ comparisonState }
       >
-        <option
-          id="maior que"
-          value="maior que"
-        >
-          maior que
-        </option>
-        <option
-          id="menor que"
-          value="menor que"
-        >
-          menor que
-        </option>
-        <option
-          id="igual a"
-          value="igual a"
-        >
-          igual a
-        </option>
+        {arrayComparison.map((item) => (
+          <option
+            id={ item }
+            value={ item }
+            key={ item }
+          >
+            { item }
+          </option>
+        ))}
       </select>
       <input
         onChange={ handleInput }
