@@ -7,7 +7,7 @@ function Search() {
   const [termo, setTermo] = useState('');
   return (
     <div>
-      <p>Star Wars</p>
+      <h2>Star Wars</h2>
       <input
         value={ termo }
         type="text"

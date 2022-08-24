@@ -14,7 +14,6 @@ function App() {
         .then((data) => {
           const dados = Object.values(data.results);
           setDadosApi(dados);
-          console.log(dados);
         });
     };
     fetchApi();

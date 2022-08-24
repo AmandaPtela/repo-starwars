@@ -50,10 +50,8 @@ function Filters() {
         number: numberState,
       }],
     );
-    console.log(objFilters);
     setArrayFilters(arrayFilters.filter((item) => item !== columnState));
     setComparisonF(arrayComparison.filter((item) => item !== comparisonState));
-    console.log(objFilters);
   }
   return (
     <>
