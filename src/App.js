@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './App.css';
 import Table from './Table';
-import myContext from './context';
 import Search from './Search';
+import myContext from './helpers/context';
 
 function App() {
-  const [dadosApi, setDadosApi] = useState([]);
+  const { setDadosApi } = useContext(myContext);
   useEffect(() => {
     const fetchApi = async () => {
       const endPoint = 'https://swapi.dev/api/planets';
@@ -14,17 +14,17 @@ function App() {
         .then((data) => {
           const dados = Object.values(data.results);
           setDadosApi(dados);
+          console.log(dados);
         });
     };
     fetchApi();
-  }, []);
+  }, [setDadosApi]);
 
-  dadosApi.forEach((i) => delete i.residents);
   return (
-    <myContext.Provider value={ dadosApi }>
-      <Search planetas={ dadosApi } />
-      <Table planetas={ dadosApi } />
-    </myContext.Provider>
+    <>
+      <Search />
+      <Table />
+    </>
   );
 }
 

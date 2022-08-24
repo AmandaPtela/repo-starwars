@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import filtrar from './helpers/functions';
+import React, { useContext, useState } from 'react';
+import Filters from './Filters';
+import myContext from './helpers/context';
 
-function Search({ planetas }) {
-  const [termo, setTermo ] = useState('');
-  const [planets, setPlanets ] = useState(planetas);
+function Search() {
+  const { setNameFilter } = useContext(myContext);
+  const [termo, setTermo] = useState('');
   return (
     <div>
       <p>Star Wars</p>
@@ -12,19 +12,14 @@ function Search({ planetas }) {
         value={ termo }
         type="text"
         placeholder="Digite um termo para buscar"
+        data-testid="name-filter"
         onChange={ (e) => {
           setTermo(e.target.value);
-          const filtrado = planetas.filter((planet) => planet.name.includes(termo));
-          const tudo = planetas;
-          filtrado.length !== 0 ? setPlanets(filtrado) : setPlanets(tudo);
-          console.log(planets);}}
+          setNameFilter(e.target.value);
+        } }
       />
-      <button type="button">Filtrar</button>
+      <Filters />
     </div>
   );
 }
-Search.propTypes = {
-  planetas: PropTypes.arrayOf(PropTypes.string).isRequired,
-  altDados: PropTypes.func.isRequired,
-};
 export default Search;
