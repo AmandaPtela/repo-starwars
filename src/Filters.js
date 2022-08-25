@@ -5,31 +5,35 @@ function Filters() {
   const [columnState, setColumState] = useState('population');
   const [comparisonState, setComparisonState] = useState('maior que');
   const [numberState, setNumberState] = useState(0);
-  const [arrayFilters, setArrayFilters] = useState([
+  const arrayFilters = [
     'population',
     'orbital_period',
     'diameter',
     'rotation_period',
-    'surface_water']);
-  const [arrayComparison, setComparisonF] = useState([
+    'surface_water'];
+  const arrayComparison = [
     'maior que',
     'menor que',
     'igual a',
-  ]);
-  /*   const arrayFilters = [
-    'population',
-    'orbital_period',
-    'diameter',
-    'rotation_period',
-    'surface_water']; */
+  ];
 
-  /*   const arrayComparison = [
-    'maior que',
-    'menor que',
-    'igual a',
-  ]; */
   const { objFilters, setObjectFilters } = useContext(myContext);
 
+  function filtro() {
+    const objColumns = objFilters.map((i) => i.column);
+    const objColumnFiltered = arrayFilters.filter((i) => !objColumns.includes(i));
+    return (
+      objColumnFiltered.map((item) => (
+        <option
+          id={ item }
+          key={ item }
+          value={ item }
+        >
+          { item }
+        </option>
+      ))
+    );
+  }
   function handleInput({ target }) {
     if (target.id === 'column-filter') {
       setColumState(target.value);
@@ -50,8 +54,9 @@ function Filters() {
         number: numberState,
       }],
     );
-    setArrayFilters(arrayFilters.filter((item) => item !== columnState));
-    setComparisonF(arrayComparison.filter((item) => item !== comparisonState));
+    setColumState('population');
+    setComparisonState('maior que');
+    setNumberState(0);
   }
   return (
     <>
@@ -61,15 +66,7 @@ function Filters() {
         data-testid="column-filter"
         value={ columnState }
       >
-        { arrayFilters.map((item) => (
-          <option
-            id={ item }
-            key={ item }
-            value={ item }
-          >
-            { item }
-          </option>
-        ))}
+        { filtro() }
       </select>
       <select
         onChange={ handleInput }

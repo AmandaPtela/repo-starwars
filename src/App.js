@@ -3,6 +3,7 @@ import './App.css';
 import Table from './Table';
 import Search from './Search';
 import myContext from './helpers/context';
+import SelectedFilters from './SelectedFilters';
 
 function App() {
   const { setDadosApi } = useContext(myContext);
@@ -22,6 +23,7 @@ function App() {
   return (
     <>
       <Search />
+      <SelectedFilters />
       <Table />
     </>
   );
