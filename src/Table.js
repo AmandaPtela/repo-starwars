@@ -4,7 +4,7 @@ import myContext from './helpers/context';
 function Table() {
   const context = useContext(myContext);
   const { dadosApi, nameFilter, objFilters } = useContext(myContext);
-  console.log('Conteúdo contexto', context);
+  // console.log('Conteúdo contexto', context);
 
   const tableFilterName = (filtradoInput) => filtradoInput
     .filter((planets) => planets.name.toUpperCase()
