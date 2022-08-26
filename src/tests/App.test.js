@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Provider from '../helpers/Provider';
 import App from '../App';
-import myContext from '../helpers/context';
+import userEvent from '@testing-library/user-event';
 
 describe('Verifica a página principal', () => {
   const mockData = {
@@ -261,7 +261,7 @@ describe('Verifica a página principal', () => {
     const pageTitle = screen.getByText(/star wars/i);
     expect(pageTitle).toBeInTheDocument();
   });
-  it('Verifica inputs', () => {
+  it('Verifica inputs', async () => {
     global.fetch = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue(mockData)
     });
@@ -298,5 +298,14 @@ describe('Verifica a página principal', () => {
     const tableHeader = screen.getAllByRole('columnheader');
     expect(tableHeader[0]).toBeInTheDocument();
     expect(tableHeader.length).toBe(13);
+
+    userEvent.selectOptions(inputColumnFilter, 'diameter')
+    userEvent.selectOptions(inputComparisonFilter, 'maior que')
+    userEvent.type(inputNumberFilter, '100000')
+
+    userEvent.click(botaoFiltro)
+
+    const itemTabela = await screen.findByText(/Bespin/i)
+    expect(itemTabela).toBeInTheDocument()
   });
 });
