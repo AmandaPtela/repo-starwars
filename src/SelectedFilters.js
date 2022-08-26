@@ -21,7 +21,7 @@ function SelectedFilters() {
       </button>
     </div>));
   return (
-    <div>
+    <div className="filtros-selecionados">
       { renderF }
       <button
         type="button"

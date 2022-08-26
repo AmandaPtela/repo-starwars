@@ -244,11 +244,11 @@ describe('Verifica a página principal', () => {
       },
     ],
   };
-  beforeEach(() => {
+  beforeEach(async() => {
     global.fetch = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue(mockData)
     });
-    fetch('https://swapi-trybe.herokuapp.com/api/planets/')
+    await fetch('https://swapi-trybe.herokuapp.com/api/planets/')
     expect(fetch).toBeCalledWith('https://swapi-trybe.herokuapp.com/api/planets/');
     expect(fetch).toHaveBeenCalled();
   });
@@ -280,7 +280,6 @@ describe('Verifica a página principal', () => {
 
     const inputColumnFilter = screen.getByTestId("column-filter");
     expect(inputColumnFilter).toBeInTheDocument();
-    console.log(inputColumnFilter);
 
     const inputComparisonFilter = screen.getByTestId("comparison-filter");
     expect(inputComparisonFilter).toBeInTheDocument();
@@ -302,10 +301,34 @@ describe('Verifica a página principal', () => {
     userEvent.selectOptions(inputColumnFilter, 'diameter')
     userEvent.selectOptions(inputComparisonFilter, 'maior que')
     userEvent.type(inputNumberFilter, '100000')
-
+    
     userEvent.click(botaoFiltro)
 
-    const itemTabela = await screen.findByText(/Bespin/i)
-    expect(itemTabela).toBeInTheDocument()
+    const filtered = Object.values(mockData.results).filter((i) => i.diameter > 100000);
+    expect(filtered).toBeDefined();
+    
+    const item2Tabela = await screen.findByText(/Bespin/i);
+    if(mockData.length === 0) {
+      expect(item2Tabela).not.toBeInTheDocument();
+    }
+    expect(item2Tabela).toBeInTheDocument();
+
+    const selectedFilters = screen.getByTestId("filter");
+    const filtroColumn = screen.getByText(/diameter/i);
+    const filtroComparison = screen.getAllByText(/maior que/i);
+    const filtroValue = screen.getByText('0100000');
+
+    expect(selectedFilters.children.length).toBe(4);
+    expect(selectedFilters).toBeInTheDocument();
+    expect(filtroColumn).toBeInTheDocument();
+    expect(filtroComparison[0]).toBeInTheDocument();
+    expect(filtroValue).toBeInTheDocument();
+    
+    const botaoRemoveFilters = screen.getByTestId("button-remove-filters");
+    expect(botaoRemoveFilters).toBeInTheDocument();
+
+    userEvent.click(botaoRemoveFilters);
+    expect(selectedFilters.children.length).not.toBe(0);
+    screen.logTestingPlaygroundURL();
   });
 });
