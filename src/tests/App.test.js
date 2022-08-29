@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import Provider from '../helpers/Provider';
 import App from '../App';
 import userEvent from '@testing-library/user-event';
@@ -301,9 +301,7 @@ describe('Verifica a página principal', () => {
     userEvent.selectOptions(inputColumnFilter, 'diameter')
     userEvent.selectOptions(inputComparisonFilter, 'maior que')
     userEvent.type(inputNumberFilter, '100000')
-    
     userEvent.click(botaoFiltro)
-
     const filtered = Object.values(mockData.results).filter((i) => i.diameter > 100000);
     expect(filtered).toBeDefined();
     
@@ -312,11 +310,26 @@ describe('Verifica a página principal', () => {
       expect(item2Tabela).not.toBeInTheDocument();
     }
     expect(item2Tabela).toBeInTheDocument();
+  });
+  it('Verifica inputs select', async () => {
+    render(
+      <Provider>
+        <App />
+      </Provider>
+    );
+    const inputNameFilter = screen.getByTestId("name-filter");
+    const botaoFiltro = screen.getByTestId("button-filter");
+    expect(inputNameFilter).toBeInTheDocument();
+    userEvent.type(inputNameFilter, 'Tatooine');
+    
+    userEvent.click(botaoFiltro)
+    const texto = await screen.findByText(/Tatooine/i);
+    expect(texto).toBeInTheDocument();
 
     const selectedFilters = screen.getByTestId("filter");
-    const filtroColumn = screen.getByText(/diameter/i);
+    const filtroColumn = screen.getByText(/population/i);
     const filtroComparison = screen.getAllByText(/maior que/i);
-    const filtroValue = screen.getByText('0100000');
+    const filtroValue = screen.getByText('0');
 
     expect(selectedFilters.children.length).toBe(4);
     expect(selectedFilters).toBeInTheDocument();
@@ -324,11 +337,68 @@ describe('Verifica a página principal', () => {
     expect(filtroComparison[0]).toBeInTheDocument();
     expect(filtroValue).toBeInTheDocument();
     
-    const botaoRemoveFilters = screen.getByTestId("button-remove-filters");
-    expect(botaoRemoveFilters).toBeInTheDocument();
+    const botaoRemoveFilter = screen.getByText("Excluir");
+    expect(botaoRemoveFilter).toBeInTheDocument();
+    userEvent.click(botaoRemoveFilter);
 
-    userEvent.click(botaoRemoveFilters);
-    expect(selectedFilters.children.length).not.toBe(0);
-    screen.logTestingPlaygroundURL();
+    expect(selectedFilters).not.toBeInTheDocument();
+
+  });
+  it('Verifica Input Filters', async () => {
+    render(
+      <Provider>
+        <App />
+      </Provider>
+    );
+    const inputColumnFilter = screen.getByTestId("column-filter");
+    const inputComparisonFilter = screen.getByTestId("comparison-filter");
+    const inputNumberFilter = screen.getByTestId("value-filter");
+    const botaoFiltro = screen.getByTestId("button-filter");
+
+    userEvent.selectOptions(inputColumnFilter, 'orbital_period');
+    userEvent.selectOptions(inputComparisonFilter, 'igual a');
+    userEvent.clear(inputNumberFilter)
+    userEvent.type(inputNumberFilter, '304');
+    userEvent.click(botaoFiltro);
+    const texto = await screen.findByText(/Tatooine/i);
+    expect(texto).toBeInTheDocument();
+  });
+  it('Verifica Input Filters', async () => {
+    render(
+      <Provider>
+        <App />
+      </Provider>
+    );
+    const inputColumnFilter = screen.getByTestId("column-filter");
+    const inputComparisonFilter = screen.getByTestId("comparison-filter");
+    const inputNumberFilter = screen.getByTestId("value-filter");
+    const botaoFiltro = screen.getByTestId("button-filter");
+
+    userEvent.selectOptions(inputColumnFilter, 'population');
+    userEvent.selectOptions(inputComparisonFilter, 'menor que');
+    userEvent.clear(inputNumberFilter)
+    userEvent.type(inputNumberFilter, '5000');
+    userEvent.click(botaoFiltro);
+    const texto = await screen.findByText(/Yavin IV/i);
+    expect(texto).toBeInTheDocument();
+  });
+  it('Verifica Input Filters', async () => {
+    render(
+      <Provider>
+        <App />
+      </Provider>
+    );
+    const inputColumnFilter = screen.getByTestId("column-filter");
+    const inputComparisonFilter = screen.getByTestId("comparison-filter");
+    const inputNumberFilter = screen.getByTestId("value-filter");
+    const botaoFiltro = screen.getByTestId("button-filter");
+
+    userEvent.selectOptions(inputColumnFilter, 'rotation_period');
+    userEvent.selectOptions(inputComparisonFilter, 'igual a');
+    userEvent.clear(inputNumberFilter)
+    userEvent.type(inputNumberFilter, '18');
+    userEvent.click(botaoFiltro);
+    const texto = await screen.findByText(/Endor/i);
+    expect(texto).toBeInTheDocument();
   });
 });
