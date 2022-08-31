@@ -17,7 +17,7 @@ function Table() {
         if (item.comparison === 'menor que') {
           return Number(planeta[item.column]) < Number(item.number);
         }
-      return Number(planeta[item.column]) === Number(item.number);
+        return Number(planeta[item.column]) === Number(item.number);
       }), dadosApi);
     return tableFilterName(filter);
   };
